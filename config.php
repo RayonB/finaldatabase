@@ -1,7 +1,7 @@
 <?php
 
 define('DB_SERVER', 'localhost');
-define('DB_NAME', 'aa');
+define('DB_NAME', 'mydb');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
 
@@ -12,4 +12,5 @@ try{
 } catch(PDOException $e){
     die("ERROR: Could not connect. " . $e->getMessage());
 }
+
 ?>

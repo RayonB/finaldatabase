@@ -7,40 +7,26 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 }
 
 require_once "config.php";
-
-// Initialize variables
 $user_id = $_SESSION["id"];
 $total_price = 0;
 $selected_requests = [];
 $error_message = "";
-
-// Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if the 'requests' array exists and is not empty
     if (isset($_POST['requests']) && !empty($_POST['requests'])) {
-        // Loop through the selected requests and calculate the total price
         foreach ($_POST['requests'] as $request_id) {
-            // Get the price of each selected request
             $sql = "SELECT price FROM request_types WHERE id = :request_id";
             if ($stmt = $pdo->prepare($sql)) {
                 $stmt->bindParam(":request_id", $request_id, PDO::PARAM_INT);
                 if ($stmt->execute()) {
                     $row = $stmt->fetch();
                     $total_price += $row['price'];
-
-                    // Store the selected request IDs
                     $selected_requests[] = $request_id;
                 }
             }
         }
 
-        // If description is provided, save the request details
         $description = isset($_POST['description']) ? trim($_POST['description']) : null;
-
-        // Combine the selected request IDs into a comma-separated string
         $request_ids_string = implode(',', $selected_requests);
-
-        // Insert the selected requests into the 'user_requests' table
         $sql = "INSERT INTO user_requests (user_id, request_id, status, total_price, description) 
                 VALUES (:user_id, :request_ids, 'pending', :total_price, :description)";
         
@@ -53,7 +39,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (!$stmt->execute()) {
                 $error_message = "Oops! Something went wrong. Please try again later.";
             } else {
-                // Redirect to dashboard after successful request submission
                 header("location: dashboard.php");
                 exit;
             }
@@ -63,8 +48,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error_message = "Please select at least one request.";
     }
 }
-
-// Fetch all request types from the database
 $sql = "SELECT * FROM request_types";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
@@ -79,7 +62,6 @@ $request_types = $stmt->fetchAll();
     <title>Create Request</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script>
-        // Update total price based on selected checkboxes
         function updateTotalPrice() {
             var totalPrice = 0;
             var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
@@ -94,7 +76,6 @@ $request_types = $stmt->fetchAll();
         }
     </script>
    <style>
-    /* Global body styling */
     body {
         font-family: 'Arial', sans-serif;
         background-color: #f0f2f5;
@@ -102,16 +83,15 @@ $request_types = $stmt->fetchAll();
         padding: 0;
     }
 
-    /* Navbar Styling */
     .navbar {
-        background-color: #343a40; /* Darker background */
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-        padding: 0.75rem 1.5rem; /* Smaller padding */
+        background-color: #343a40; 
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); 
+        padding: 0.75rem 1.5rem; 
         transition: background-color 0.3s ease;
     }
 
     .navbar .navbar-brand {
-        font-size: 22px; /* Smaller brand font */
+        font-size: 22px;
         font-weight: bold;
         color: #ff6600;
         text-transform: uppercase;
@@ -122,30 +102,28 @@ $request_types = $stmt->fetchAll();
     .navbar .navbar-brand:hover {
         color: #ff9900;
     }
-
-    /* Button Styling (Email and Logout) */
     .navbar .btn-email,
     .navbar .btn-logout {
-        background-color: #007bff; /* Blue button color */
+        background-color: #007bff; 
         color: white;
-        padding: 8px 16px; /* Smaller padding */
+        padding: 8px 16px; 
         border-radius: 30px;
-        font-size: 1rem; /* Smaller font size */
+        font-size: 1rem; 
         border: none;
         display: inline-flex;
         align-items: center;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
     }
 
     .navbar .btn-email:hover,
     .navbar .btn-logout:hover {
-        background-color: #0056b3; /* Darker blue on hover */
-        transform: scale(1.05); /* Slight scale-up effect */
+        background-color: #0056b3; 
+        transform: scale(1.05); 
     }
 
     .navbar .btn-email {
-        background-color: #28a745; /* Green button for email */
+        background-color: #28a745; 
     }
 
     .navbar .btn-email:hover {
@@ -153,67 +131,57 @@ $request_types = $stmt->fetchAll();
     }
 
     .navbar .btn-logout {
-        background-color: #dc3545; /* Red button for logout */
+        background-color: #dc3545;
     }
 
     .navbar .btn-logout:hover {
         background-color: #c82333;
     }
-
-    /* Button Icons */
     .navbar .btn-email i,
     .navbar .btn-logout i {
-        margin-right: 8px; /* Space between icon and text */
+        margin-right: 8px; 
     }
-
-    /* Align items to the right */
     .ml-auto {
         margin-left: auto;
     }
-
-    /* Make sure the buttons don't stack on small screens */
     @media (max-width: 767px) {
         .navbar .navbar-brand {
-            font-size: 20px; /* Even smaller brand text on mobile */
+            font-size: 20px;
         }
 
         .navbar .btn-email,
         .navbar .btn-logout {
             font-size: 0.9rem;
-            padding: 6px 12px; /* Even smaller buttons on mobile */
+            padding: 6px 12px;
         }
     }
 </style>
 
 </head>
 <head>
-    <!-- Add Font Awesome CDN for icon support -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="dashboard.php">Dashboard</a>
-            
-            <div class="ml-auto">
-                <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
-                    
-                    <a class="btn btn-email" href="email.php">
-                        <i class="fas fa-envelope"></i> Email
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="dashboard.php">Dashboard</a>
+        
+        < <a class="btn btn-email" href="email.php">
+                        <i class="fas fa-paper-plane"></i> Email
                     </a>
-                   
-                    <a href="create_request.php" class="btn btn-primary btn-create-request">
-                        Create Request
+                    <a class="btn btn-email" href="create_request.php">
+                        <i class="fas fa-plus-circle"></i> Create Request
                     </a>
-                    
+                    <a class="btn btn-email" href="sendfeedbacks.php">
+                        <i class="fas fa-comments"></i> Share Feedbacks
+                    </a>
                     <button type="submit" name="logout" class="btn btn-danger btn-logout">
                         <i class="fas fa-sign-out-alt"></i> Logout
                     </button>
-                </form>
-            </div>
         </div>
-    </nav>
+    </div>
+</nav>
 
     
     <div class="container mt-5">
