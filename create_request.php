@@ -176,9 +176,10 @@ $request_types = $stmt->fetchAll();
                     <a class="btn btn-email" href="sendfeedbacks.php">
                         <i class="fas fa-comments"></i> Share Feedbacks
                     </a>
-                    <button type="submit" name="logout" class="btn btn-danger btn-logout">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
+                    <a href="logout.php" class="btn btn-danger btn-logout">
+    <i class="fas fa-sign-out-alt"></i> Logout
+</a>
+
         </div>
     </div>
 </nav>

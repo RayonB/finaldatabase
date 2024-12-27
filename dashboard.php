@@ -174,7 +174,6 @@ if (isset($_POST['logout'])) {
         </div>
     </div>
 
-    <!-- User Requests Table -->
     <div class="row">
         <div class="col-md-12">
             <div class="card">

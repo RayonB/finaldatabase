@@ -58,14 +58,14 @@ if (isset($_POST['update_status'])) {
         padding: 0;
     }
     .navbar {
-        background-color: #343a40; /* Darker background */
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-        padding: 0.75rem 1.5rem; /* Smaller padding */
+        background-color: #343a40; 
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        padding: 0.75rem 1.5rem; 
         transition: background-color 0.3s ease;
     }
 
     .navbar .navbar-brand {
-        font-size: 22px; /* Smaller brand font */
+        font-size: 22px; 
         font-weight: bold;
         color: #ff6600;
         text-transform: uppercase;
@@ -139,8 +139,7 @@ if (isset($_POST['update_status'])) {
     }
 </style>
 
-</head>
-<head>
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 </head>
 
@@ -159,9 +158,11 @@ if (isset($_POST['update_status'])) {
                     <a class="btn btn-email" href="sendfeedbacks.php">
                         <i class="fas fa-comments"></i> Share Feedbacks
                     </a>
-                    <button type="submit" name="logout" class="btn btn-danger btn-logout">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
+                    <a href="logout.php" class="btn btn-danger btn-logout">
+    <i class="fas fa-sign-out-alt"></i> Logout
+</a>
+
+
         </div>
     </div>
 </nav>
