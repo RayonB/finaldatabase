@@ -1,31 +1,8 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Dec 27, 2024 at 04:56 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `mydb`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `admins`
---
 
 CREATE TABLE `admins` (
   `id` int(11) NOT NULL,
@@ -54,20 +31,6 @@ CREATE TABLE `feedbacks` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `feedbacks`
---
-
-INSERT INTO `feedbacks` (`id`, `user_id`, `feedback`, `rating`, `created_at`) VALUES
-(26, 1, 'dasdsad', 4, '2024-12-27 14:25:16'),
-(27, 1, 'asfas', 1, '2024-12-27 14:26:20'),
-(28, 1, 'asfasfasf', 1, '2024-12-27 14:26:35');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `feedback_replies`
---
 
 CREATE TABLE `feedback_replies` (
   `id` int(11) NOT NULL,
@@ -77,18 +40,6 @@ CREATE TABLE `feedback_replies` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `feedback_replies`
---
-
-INSERT INTO `feedback_replies` (`id`, `feedback_id`, `reply`, `admin_id`, `created_at`) VALUES
-(1, 27, 'thank you sir ', 1, '2024-12-27 15:09:23');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `request_types`
---
 
 CREATE TABLE `request_types` (
   `id` int(11) NOT NULL,
@@ -96,9 +47,6 @@ CREATE TABLE `request_types` (
   `price` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `request_types`
---
 
 INSERT INTO `request_types` (`id`, `request_name`, `price`) VALUES
 (1, 'Student ID Card', 20.01),
@@ -139,20 +87,6 @@ CREATE TABLE `users` (
   `gender` enum('male','female','other') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `email`, `password`, `status`, `full_name`, `course`, `cellphone_number`, `gender`) VALUES
-(1, 'joshua@gmail.com', '$2y$10$5LFrnU80NtmtBb59BCvlcO685cya8YLtxTvOhpjM1FVmCgLQeTOjG', 'student', 'joshua', 'BSIT', '09065804521', 'male'),
-(2, 'mama@gmail.com', '$2y$10$SDiLqHwWZQFwySK/1kkO9eyEZajWj6iSZ1soyTd7OKlJrzJIpYmqu', 'instructor', 'ewrewrs', 'BSIT', '09065804521', 'female');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `user_requests`
---
-
 CREATE TABLE `user_requests` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -163,32 +97,6 @@ CREATE TABLE `user_requests` (
   `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `user_requests`
---
-
-INSERT INTO `user_requests` (`id`, `user_id`, `request_id`, `status`, `date_requested`, `total_price`, `description`) VALUES
-(1, 2, 17, 'approved', '2024-12-19 16:06:38', 33.00, 'sadsadsa'),
-(2, 2, 19, 'declined', '2024-12-19 16:06:38', 33.00, 'sadsadsa'),
-(3, 2, 1, 'approved', '2024-12-19 16:06:58', 65.00, 'asdsaf'),
-(4, 2, 3, 'declined', '2024-12-19 16:06:58', 65.00, 'asdsaf'),
-(5, 2, 5, 'approved', '2024-12-19 16:06:58', 65.00, 'asdsaf'),
-(6, 2, 3, 'declined', '2024-12-19 16:46:31', 15.00, 'safsaf'),
-(7, 2, 2, 'approved', '2024-12-19 16:49:09', 25.00, 'sdsad'),
-(8, 2, 3, 'approved', '2024-12-19 16:49:50', 45.00, 'dasdsa'),
-(9, 2, 5, 'approved', '2024-12-19 16:49:50', 45.00, 'dasdsa'),
-(10, 2, 3, 'declined', '2024-12-19 16:53:30', 55.00, 'sadsad'),
-(11, 1, 13, 'declined', '2024-12-27 07:55:25', 45.00, 'sadsad'),
-(12, 1, 5, 'approved', '2024-12-27 13:35:30', 40.00, 'dsfsdfds'),
-(13, 1, 7, 'pending', '2024-12-27 13:36:52', 22.00, '');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `admins`
---
 ALTER TABLE `admins`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`);
@@ -291,7 +199,3 @@ ALTER TABLE `user_requests`
   ADD CONSTRAINT `user_requests_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `user_requests_ibfk_2` FOREIGN KEY (`request_id`) REFERENCES `request_types` (`id`) ON DELETE CASCADE;
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
